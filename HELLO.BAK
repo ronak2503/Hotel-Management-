@@ -1,0 +1,418 @@
+
+#include <stdio.h>
+#include <conio.h>
+#include <stdlib.h>
+#include <string.h>
+struct guest
+{
+	int room_no;
+	int member;
+	char name[50];
+	char id[12];
+	char number[12];
+	char email[20];
+	char address[100];
+};
+struct guest g;
+
+void search()
+{
+
+	FILE *fp;
+	int f = 0, room, i = 1;
+	window(1, 1, 80, 25);
+	textbackground(15);
+	clrscr();
+	gotoxy(32, 2);
+	textcolor(0);
+	printf("THE SEARCH DATA");
+	fp = fopen("data.txt", "ab+");
+	if (fp == NULL)
+	{
+		printf("the file is not open\n");
+	}
+	else
+	{
+		clrscr();
+		textcolor(0);
+		gotoxy(30, 5);
+		printf("Enter the room number ::");
+		scanf("%d", &room);
+		while (fread(&g, sizeof(g), 1, fp) > 0 && f == 0)
+		{
+			if (g.room_no == room != 0)
+			{
+				f = 1;
+				clrscr();
+				gotoxy(23, 1);
+				printf("Succesfull And Customer Record Is as Follow");
+				printf("\n\nThe room no :: %d\n", g.room_no);
+				printf("The name :: %s\n", g.name);
+				printf("The member :: %d\n", g.member);
+				printf("The Id :: %s\n", g.id);
+				printf("The number :: %s\n", g.number);
+				printf("The email :: %s\n", g.email);
+				printf("The address :: %s\n\n", g.address);
+			}
+		}
+	}
+	if (f == 0)
+	{
+		textcolor(RED);
+		cprintf("\nNo such a record!!\n");
+	}
+	fclose(fp);
+	getch();
+}
+void insert()
+{
+	FILE *fp;
+	window(1, 1, 80, 25);
+	textbackground(15);
+	clrscr();
+	gotoxy(32, 2);
+	textcolor(0);
+	cprintf("ADD CUSTOMER DATA");
+	fp = fopen("data.txt", "ab+");
+	if (fp == NULL)
+	{
+		printf("the file is not open");
+	}
+	textcolor(0);
+	gotoxy(1, 4);
+	cprintf("Enter the room no :: ");
+	scanf("%d", &g.room_no);
+	fflush(stdin);
+	gotoxy(1, 5);
+	cprintf("Enter the member :: ");
+	scanf("%d", &g.member);
+	gotoxy(1, 6);
+	fflush(stdin);
+	cprintf("Enter the name :: ");
+	gets(g.name);
+	gotoxy(1, 7);
+	cprintf("Enter the Id :: ");
+	gets(g.id);
+	gotoxy(1, 8);
+	cprintf("Enter the number :: ");
+	gets(g.number);
+	gotoxy(1, 9);
+	cprintf("Enter the email :: ");
+	gets(g.email);
+	gotoxy(1, 10);
+	cprintf("Enter the address :: ");
+	gets(g.address);
+	fwrite(&g, sizeof(g), 1, fp);
+	{
+		clrscr();
+		textcolor(4);
+		gotoxy(30, 22);
+		printf("insert customer data");
+	}
+	fclose(fp);
+	getch();
+}
+void updata()
+{
+	FILE *fp;
+	int room, pos, f = 0;
+	window(1, 1, 80, 25);
+	textbackground(WHITE);
+	clrscr();
+	gotoxy(32, 1);
+	textcolor(0);
+	cprintf("THE UPDATA DATA");
+	gotoxy(30, 2);
+	cprintf("Updata the guest data");
+	textcolor(0);
+	gotoxy(1, 3);
+	cprintf("Enter the room no :: ");
+	scanf("%d", &room);
+	fp = fopen("data.txt", "r+b");
+	while (fread(&g, sizeof(g), 1, fp) != NULL)
+	{
+		textcolor(0);
+		if (room == g.room_no)
+		{
+			f = 1;
+			gotoxy(23, 5);
+			cprintf("Succesfull And Customer Record Is as Follow");
+			gotoxy(1, 6);
+			cprintf("The room no :: %d\n", g.room_no);
+			gotoxy(1, 7);
+			cprintf("The name :: %s\n", g.name);
+			gotoxy(1, 8);
+			cprintf("The member :: %d\n", g.member);
+			gotoxy(1, 9);
+			cprintf("The Id :: %s\n", g.id);
+			gotoxy(1, 10);
+			cprintf("The number :: %s\n", g.number);
+			gotoxy(1, 11);
+			cprintf("The email :: %s\n", g.email);
+			gotoxy(1, 12);
+			cprintf("The address :: %s\n", g.address);
+			textcolor(0);
+			gotoxy(30, 14);
+			cprintf("Enter the updata data");
+			pos = ftell(fp);
+			fseek(fp, pos - sizeof(g), SEEK_SET);
+			gotoxy(1, 15);
+			cprintf("Update the room no :: ");
+			scanf("%d", &g.room_no);
+			fflush(stdin);
+			gotoxy(1, 16);
+			cprintf("Update the member :: ");
+			scanf("%d", &g.member);
+			fflush(stdin);
+			gotoxy(1, 17);
+			cprintf("Update the name :: ");
+			gets(g.name);
+			gotoxy(1, 18);
+			cprintf("Update the Id :: ");
+			gets(g.id);
+			gotoxy(1, 19);
+			cprintf("Update the number :: ");
+			gets(g.number);
+			gotoxy(1, 20);
+			cprintf("Update the email :: ");
+			gets(g.email);
+			gotoxy(1, 21);
+			cprintf("Update the address :: ");
+			gets(g.address);
+			fwrite(&g, sizeof(g), 1, fp);
+			fclose(fp);
+			break;
+		}
+	}
+	if (f == 0)
+	{
+		textcolor(RED);
+		cprintf("\nNot exist!!\n");
+		getch();
+	}
+	getch();
+}
+void display()
+{
+	FILE *fp;
+	int i = 1, j;
+	window(1, 1, 80, 25);
+	textbackground(7);
+	textcolor(0);
+	clrscr();
+	gotoxy(24, 1);
+
+	cprintf("**** HOTAL MANAGEMENT SYSTEM ****");
+	gotoxy(28, 2);
+	printf("THE DISPLAY CUSTOMER DATA");
+	fp = fopen("data.txt", "rb");
+	if (fp == NULL)
+	{
+		printf("the file is not open\n");
+	}
+	else
+	{
+		gotoxy(1, 3);
+		printf("--------------------------------------------------------------------------------\n");
+		gotoxy(1, 4);
+		printf("S.NO  ROOM.NO    MEMBER          NAME          NUMBER            ADRESS         \n");
+		gotoxy(1, 5);
+		printf("--------------------------------------------------------------------------------\n");
+		j = 6;
+		while (fread(&g, sizeof(g), 1, fp) != NULL)
+		{
+			gotoxy(1, j);
+			printf("%d", i);
+			gotoxy(10, j);
+			printf("%d", g.room_no);
+			gotoxy(20, j);
+			printf("%d", g.member);
+			gotoxy(28, j);
+			printf("%s", g.name);
+			gotoxy(44, j);
+			printf("%s", g.number);
+			gotoxy(64, j);
+			printf("\t%s", g.address);
+			i++, j++;
+		}
+		fclose(fp);
+		textcolor(RED);
+		printf("\n");
+		cprintf("Press any kye.....");
+	}
+	getch();
+}
+
+void delet()
+{
+	FILE *fp, *ft;
+	int f = 0, room;
+	window(1, 1, 80, 25);
+	textbackground(11);
+	textcolor(0);
+	clrscr();
+	gotoxy(32, 2);
+	cprintf("THE DELET DATA");
+
+	fp = fopen("data.txt", "rb");
+	if (fp == NULL)
+	{
+		printf("the file not open");
+	}
+	printf("Previous tha data\t\t\n\n");
+	display();
+	clrscr();
+	textcolor(0);
+	gotoxy(30, 22);
+	cprintf("enter the room no ::");
+	scanf("%d", &room);
+	ft = fopen("data1.txt", "ab+");
+	while (fread(&g, sizeof(g), 1, fp) != NULL)
+	{
+		if (room != g.room_no)
+		{
+			fwrite(&g, sizeof(g), 1, ft);
+		}
+		else
+		{
+			f = 1;
+		}
+	}
+	if (f == 0)
+	{
+		cprintf("\nNo such a record!!\n");
+	}
+	fclose(fp);
+	fclose(ft);
+	remove("data.txt");
+	rename("data1.txt", "data.txt");
+	clrscr();
+	display();
+	getch();
+}
+
+void main()
+{
+	char password[30], orignal[30], ch, a;
+	int i, j = 1, n;
+	FILE *fp;
+	window(1, 1, 80, 25);
+	textbackground(BLACK);
+	clrscr();
+
+	window(20, 5, 60, 9);
+	textbackground(BLACK);
+	clrscr();
+	gotoxy(2, 2);
+	textcolor(RED);
+	cprintf("Enter the password = ");
+	i = 0;
+
+	do
+	{
+		ch = getch();
+		if (ch == 13)
+		{
+			password[i] = '\0';
+			break;
+		}
+		password[i++] = ch;
+		cprintf("*");
+	} while (1);
+	fp = fopen("password.txt", "r");
+	fgets(orignal, 30, fp);
+	fclose(fp);
+	if (!strcmp(orignal, password) == 0)
+	{
+
+		gotoxy(13, 3);
+		textcolor(RED + BLINK);
+		cprintf("\nIncorrect password");
+	}
+	else
+	{
+		gotoxy(13, 3);
+		textcolor(GREEN + BLINK);
+		cprintf("Correct password");
+		sleep(1);
+		system("cls");
+		window(20, 13, 60, 19);
+		textbackground(BLACK);
+		clrscr();
+		gotoxy(15, 1);
+		textcolor(11);
+		cprintf("L O D I N G");
+		gotoxy(15, 1);
+		for (j = 1; j < 12; j++)
+		{
+			cprintf("%c", 254);
+			delay(200);
+		}
+
+		while (n != 6)
+		{
+			window(1, 1, 80, 25);
+			textbackground(BLUE + BLINK);
+			textcolor(0);
+			clrscr();
+			gotoxy(1, 1);
+			printf("%c"__DATE__);
+			gotoxy(73, 1);
+			printf("%s", __TIME__);
+			gotoxy(25, 2);
+			printf("**** HOTAL MANAGEMENT SYSTEM ****\n");
+			window(25, 5, 57, 16);
+			textbackground(0);
+			clrscr();
+			gotoxy(13, 1);
+			textcolor(4);
+			cprintf("Main Menu");
+			textcolor(12);
+			gotoxy(5, 3);
+			cprintf("1 .INSERT DATA\n");
+			gotoxy(5, 4);
+			cprintf("2 .SEARCH DATA\n");
+			gotoxy(5, 5);
+			cprintf("3 .UPDATA DATA\n");
+			gotoxy(5, 6);
+			cprintf("4 .DISPLAY DATA\n");
+			gotoxy(5, 7);
+			cprintf("5 .DELET DATA\n");
+			gotoxy(5, 8);
+			cprintf("6 .EXIT\n\n");
+			gotoxy(5, 10);
+			cprintf("Press key :: ");
+			n = getch();
+			switch (n)
+			{
+			case '1':
+				system("cls");
+				insert();
+				break;
+			case '2':
+				system("cls");
+				search();
+				break;
+			case '3':
+				system("cls");
+				updata();
+				break;
+			case '4':
+				system("cls");
+				display();
+				break;
+			case '5':
+				system("cls");
+				delet();
+				break;
+			default:
+				textcolor(0);
+				gotoxy(5, 12);
+				cprintf("!! WRONG KEY PRESS !!");
+				exit(0);
+				break;
+			}
+		}
+	}
+	getch();
+}
